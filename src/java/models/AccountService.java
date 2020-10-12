@@ -1,6 +1,8 @@
 package models;
 
-public class AccountService 
+import java.io.Serializable;
+
+public class AccountService implements Serializable
 {
     public User login(String username, String password)
     {
