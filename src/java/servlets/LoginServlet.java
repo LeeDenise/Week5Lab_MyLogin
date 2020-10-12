@@ -18,22 +18,60 @@ public class LoginServlet extends HttpServlet
     {
         HttpSession session = request.getSession();
         
+//        session.invalidate();
+//        session = request.getSession();
+        
+        // if user session exists, redirect to home page
+//        User user = (User)session.getAttribute("users");
+//        if (user != null)
+//        {
+//            response.sendRedirect(request.getContextPath() + "/home");
+//            return;
+//        } else 
+//        {
+//            session.invalidate();
+//            session = request.getSession();   
+//        }
+        
         // if the param "logout" exists, 
-        String value = request.getParameter("action");
-        if (value.equals("logout"))
+        if (request.getParameter("action") != null)
         {
-            //invalidate the session
-            session.invalidate();
-            
-            // display a message that user has successfully logged out
-            
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-                    .forward(request, response);
-        } else
+            String value = request.getParameter("action");
+            if (value.equals("logout"))
+            {
+                //invalidate the session
+                session.invalidate();
+
+                // display a message that user has successfully logged out
+                request.setAttribute("message", "You logged out successfully!");
+
+                getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
+                        .forward(request, response);
+                return;
+            } 
+        }
+        else
         {
+            User user = (User)session.getAttribute("users");
+            
+            // if user session exists, redirect to home page
+            if (user != null)
+            {
+                response.sendRedirect(request.getContextPath() + "/home");
+                return;
+            } 
+            else 
+            {
+                session.invalidate();
+                session = request.getSession();   
+            }
+        
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
                     .forward(request, response);
         }
+
+//        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
+//                .forward(request, response);
     }
 
     @Override
@@ -49,7 +87,10 @@ public class LoginServlet extends HttpServlet
         if (username == null || password == null || username.equals("") || password.equals(""))
         {       
             User user = new User(username, password);
-            request.setAttribute("user", user);
+            request.setAttribute("user", user);            
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
+                    .forward(request, response);
+            return;
         }
         
         // passes the username and password param to the login() method of AccountService
@@ -67,6 +108,9 @@ public class LoginServlet extends HttpServlet
             response.sendRedirect(request.getContextPath() + "/home");
         } else 
         {
+            User user = new User(username, password);
+            request.setAttribute("user", user);   
+            
             request.setAttribute("message", "Invalid ID/Password");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
                     .forward(request, response);

@@ -22,11 +22,13 @@ public class HomeServlet extends HttpServlet
         
         if (user == null)
         {
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
         }
         
         request.setAttribute("message", "Hello, " + user.getUsername() + ".");
-        getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/home.jsp")
+                .forward(request, response);
     }
 
     @Override
