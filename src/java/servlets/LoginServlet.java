@@ -18,21 +18,6 @@ public class LoginServlet extends HttpServlet
     {
         HttpSession session = request.getSession();
         
-//        session.invalidate();
-//        session = request.getSession();
-        
-        // if user session exists, redirect to home page
-//        User user = (User)session.getAttribute("users");
-//        if (user != null)
-//        {
-//            response.sendRedirect(request.getContextPath() + "/home");
-//            return;
-//        } else 
-//        {
-//            session.invalidate();
-//            session = request.getSession();   
-//        }
-        
         // if the param "logout" exists, 
         if (request.getParameter("action") != null)
         {
@@ -69,9 +54,6 @@ public class LoginServlet extends HttpServlet
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
                     .forward(request, response);
         }
-
-//        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp")
-//                .forward(request, response);
     }
 
     @Override
